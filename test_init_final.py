@@ -353,9 +353,9 @@ def init():
 		f = []
 		bossTime.append(datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0])))
 		tmp_bossTime.append(datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0])))
-		bossTimeString.append('99:99:99')
+		bossTimeString.append('99:99')
 		bossDateString.append('9999-99-99')
-		tmp_bossTimeString.append('99:99:99')
+		tmp_bossTimeString.append('99:99')
 		tmp_bossDateString.append('9999-99-99')
 		bossFlag.append(False)
 		bossFlag0.append(False)
@@ -504,7 +504,7 @@ async def dbSave():
 
 	for i in range(bossNum):
 		for j in range(bossNum):
-			if bossTimeString[i] and bossTimeString[j] != '99:99:99':
+			if bossTimeString[i] and bossTimeString[j] != '99:99':
 				if bossTimeString[i] == bossTimeString[j] and i != j:
 					tmp_time1 = bossTimeString[j][:6]
 					tmp_time2 = (int(bossTimeString[j][6:]) + 1)%100
@@ -524,7 +524,7 @@ async def dbSave():
 	for timestring in sorted(datelist):
 		for i in range(bossNum):
 			if timestring == bossTime[i]:
-				if bossTimeString[i] != '99:99:99' or bossMungFlag[i] == True :
+				if bossTimeString[i] != '99:99' or bossMungFlag[i] == True :
 					if bossMungFlag[i] == True :
 						if bossData[i][2] == '0' :
 							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
@@ -595,7 +595,7 @@ async def dbLoad():
 						tmp_bossTime[j] = tmp_now
 						tmp_bossTimeString[j] = tmp_bossTime[j].strftime('%H:%M:%S')
 						tmp_bossDateString[j] = tmp_bossTime[j].strftime('%Y-%m-%d')
-						bossTimeString[j] = '99:99:99'
+						bossTimeString[j] = '99:99'
 						bossDateString[j] = '9999-99-99'
 						bossTime[j] = tmp_bossTime[j] + datetime.timedelta(days=365)
 					else:
@@ -981,7 +981,7 @@ class taskCog(commands.Cog):
 						tmp_bossTime[i] = bossTime[i]
 						tmp_bossTimeString[i] = tmp_bossTime[i].strftime('%H:%M:%S')
 						tmp_bossDateString[i] = tmp_bossTime[i].strftime('%Y-%m-%d')
-						bossTimeString[i] = '99:99:99'
+						bossTimeString[i] = '99:99'
 						bossDateString[i] = '9999-99-99'
 						bossTime[i] = now+datetime.timedelta(days=365)
 						if bossData[i][6] != '' :
@@ -1008,9 +1008,9 @@ class taskCog(commands.Cog):
 								if int(basicSetting[17]) <= bossMungCnt[i] and int(basicSetting[17]) != 0:
 									bossTime[i] = datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
 									tmp_bossTime[i] =  datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
-									bossTimeString[i] = '99:99:99'
+									bossTimeString[i] = '99:99'
 									bossDateString[i] = '9999-99-99'
-									tmp_bossTimeString[i] = '99:99:99'
+									tmp_bossTimeString[i] = '99:99'
 									tmp_bossDateString[i] = '9999-99-99'
 									bossFlag[i] = False
 									bossFlag0[i] = False
@@ -1036,7 +1036,7 @@ class taskCog(commands.Cog):
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 										await self.bot.get_channel(channel).send("```" +  bossData[i][0] + ' 미입력 됐습니다.```', tts=False)
 										embed = discord.Embed(
-											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
+											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다:)```',
 											color=0xff0000
 											)
 										await self.bot.get_channel(channel).send(embed=embed, tts=False)
@@ -1054,9 +1054,9 @@ class taskCog(commands.Cog):
 										tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
 										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
-										await self.bot.get_channel(channel).send("```" + bossData[i][0] + ' 멍 입니다.```')
+										await self.bot.get_channel(channel).send("```" + bossData[i][0] + ' 멍 입니다;(```')
 										embed = discord.Embed(
-											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
+											description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다:)```',
 											color=0xff0000
 											)
 										await self.bot.get_channel(channel).send(embed=embed, tts=False)
@@ -1609,7 +1609,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 			
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1800 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -1895,7 +1895,7 @@ class mainCog(commands.Cog):
 			sorted_datelist = []
 
 			for i in range(bossNum):
-				if bossMungFlag[i] != True and bossTimeString[i] != '99:99:99' :
+				if bossMungFlag[i] != True and bossTimeString[i] != '99:99' :
 					datelist2.append(bossTime[i])
 
 			for i in range(fixed_bossNum):
@@ -2075,7 +2075,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1000 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -2141,7 +2141,7 @@ class mainCog(commands.Cog):
 					tmp_boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-						title = "----- 보스탐 정보 -----",
+						title = "❤❤❤수호혈 보스타임❤❤❤",
 						description= boss_information[0],
 						color=0x0000ff
 						)
@@ -2236,7 +2236,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1800 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -3451,9 +3451,9 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 					if message.content == bossData[i][0] +'삭제' or message.content == bossData[i][0] +' 삭제':
 						bossTime[i] = datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
 						tmp_bossTime[i] =  datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
-						bossTimeString[i] = '99:99:99'
+						bossTimeString[i] = '99:99'
 						bossDateString[i] = '9999-99-99'
-						tmp_bossTimeString[i] = '99:99:99'
+						tmp_bossTimeString[i] = '99:99'
 						tmp_bossDateString[i] = '9999-99-99'
 						bossFlag[i] = False
 						bossFlag0[i] = False
