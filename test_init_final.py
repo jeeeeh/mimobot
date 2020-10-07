@@ -353,9 +353,9 @@ def init():
 		f = []
 		bossTime.append(datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0])))
 		tmp_bossTime.append(datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0])))
-		bossTimeString.append('99:99')
+		bossTimeString.append('99:99:99')
 		bossDateString.append('9999-99-99')
-		tmp_bossTimeString.append('99:99')
+		tmp_bossTimeString.append('99:99:99')
 		tmp_bossDateString.append('9999-99-99')
 		bossFlag.append(False)
 		bossFlag0.append(False)
@@ -504,7 +504,7 @@ async def dbSave():
 
 	for i in range(bossNum):
 		for j in range(bossNum):
-			if bossTimeString[i] and bossTimeString[j] != '99:99':
+			if bossTimeString[i] and bossTimeString[j] != '99:99:99':
 				if bossTimeString[i] == bossTimeString[j] and i != j:
 					tmp_time1 = bossTimeString[j][:6]
 					tmp_time2 = (int(bossTimeString[j][6:]) + 1)%100
@@ -524,12 +524,12 @@ async def dbSave():
 	for timestring in sorted(datelist):
 		for i in range(bossNum):
 			if timestring == bossTime[i]:
-				if bossTimeString[i] != '99:99' or bossMungFlag[i] == True :
+				if bossTimeString[i] != '99:99:99' or bossMungFlag[i] == True :
 					if bossMungFlag[i] == True :
 						if bossData[i][2] == '0' :
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 						else : 
-							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M:%S') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (멍 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
+							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + tmp_bossTime[i].strftime('%H:%M') + ' @ ' + tmp_bossTime[i].strftime('%Y-%m-%d') + ' (멍 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
 					else:
 						if bossData[i][2] == '0' :
 							information1 += ' - ' + bossData[i][0] + '(' + bossData[i][1] + '.' + bossData[i][5] + ') : ' + bossTimeString[i] + ' @ ' + bossDateString[i] + ' (미입력 ' + str(bossMungCnt[i]) + '회)' + ' * ' + bossData[i][6] + '\n'
@@ -593,14 +593,14 @@ async def dbLoad():
 					if tmp_now_chk > now2 > tmp_now: #젠중.
 						bossMungFlag[j] = True
 						tmp_bossTime[j] = tmp_now
-						tmp_bossTimeString[j] = tmp_bossTime[j].strftime('%H:%M:%S')
+						tmp_bossTimeString[j] = tmp_bossTime[j].strftime('%H:%M')
 						tmp_bossDateString[j] = tmp_bossTime[j].strftime('%Y-%m-%d')
-						bossTimeString[j] = '99:99'
+						bossTimeString[j] = '99:99:99'
 						bossDateString[j] = '9999-99-99'
 						bossTime[j] = tmp_bossTime[j] + datetime.timedelta(days=365)
 					else:
 						tmp_bossTime[j] = bossTime[j] = tmp_now
-						tmp_bossTimeString[j] = bossTimeString[j] = bossTime[j].strftime('%H:%M:%S')
+						tmp_bossTimeString[j] = bossTimeString[j] = bossTime[j].strftime('%H:%M')
 						tmp_bossDateString[j] = bossDateString[j] = bossTime[j].strftime('%Y-%m-%d')
 						
 					bossData[j][6] = beforeBossData[i+1][tmp_msglen+2:len(beforeBossData[i+1])]
@@ -870,7 +870,7 @@ class taskCog(commands.Cog):
 
 			if channel != '':			
 				################ 보탐봇 재시작 ################ 
-				if endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M:%S') == now.strftime('%Y-%m-%d ') + now.strftime('%H:%M:%S'):
+				if endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M') == now.strftime('%Y-%m-%d ') + now.strftime('%H:%M'):
 					await dbSave()
 					await FixedBossDateSave()
 					await data_list_Save("kill_list.ini", "-----척살명단-----", kill_Data)
@@ -907,7 +907,7 @@ class taskCog(commands.Cog):
 						if basicSetting[3] != '0':
 							if fixed_bossFlag0[i] == False:
 								fixed_bossFlag0[i] = True
-								await self.bot.get_channel(channel).send("```" + fixed_bossData[i][0] + ' ' + basicSetting[3] + '분 전 ' + fixed_bossData[i][3] +' [' +  fixed_bossTime[i].strftime('%H:%M:%S') + ']```', tts=False)
+								await self.bot.get_channel(channel).send("```" + fixed_bossData[i][0] + ' ' + basicSetting[3] + '분 전 ' + fixed_bossData[i][3] +' [' +  fixed_bossTime[i].strftime('%H:%M') + ']```', tts=False)
 								try:
 									if basicSetting[21] == "1":
 										await PlaySound(self.bot.voice_clients[0], './sound/' + fixed_bossData[i][0] + '알림1.mp3')
@@ -919,7 +919,7 @@ class taskCog(commands.Cog):
 						if basicSetting[1] != '0' :
 							if fixed_bossFlag[i] == False:
 								fixed_bossFlag[i] = True
-								await self.bot.get_channel(channel).send("```" + fixed_bossData[i][0] + ' ' + basicSetting[1] + '분 전 ' + fixed_bossData[i][3] +' [' +  fixed_bossTime[i].strftime('%H:%M:%S') + ']```', tts=False)
+								await self.bot.get_channel(channel).send("```" + fixed_bossData[i][0] + ' ' + basicSetting[1] + '분 전 ' + fixed_bossData[i][3] +' [' +  fixed_bossTime[i].strftime('%H:%M') + ']```', tts=False)
 								try:
 									if basicSetting[21] == "1":
 										await PlaySound(self.bot.voice_clients[0], './sound/' + fixed_bossData[i][0] + '알림.mp3')
@@ -979,9 +979,9 @@ class taskCog(commands.Cog):
 						#print ('if ', bossTime[i])
 						bossMungFlag[i] = True
 						tmp_bossTime[i] = bossTime[i]
-						tmp_bossTimeString[i] = tmp_bossTime[i].strftime('%H:%M:%S')
+						tmp_bossTimeString[i] = tmp_bossTime[i].strftime('%H:%M')
 						tmp_bossDateString[i] = tmp_bossTime[i].strftime('%Y-%m-%d')
-						bossTimeString[i] = '99:99'
+						bossTimeString[i] = '99:99:99'
 						bossDateString[i] = '9999-99-99'
 						bossTime[i] = now+datetime.timedelta(days=365)
 						if bossData[i][6] != '' :
@@ -1008,9 +1008,9 @@ class taskCog(commands.Cog):
 								if int(basicSetting[17]) <= bossMungCnt[i] and int(basicSetting[17]) != 0:
 									bossTime[i] = datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
 									tmp_bossTime[i] =  datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
-									bossTimeString[i] = '99:99'
+									bossTimeString[i] = '99:99:99'
 									bossDateString[i] = '9999-99-99'
-									tmp_bossTimeString[i] = '99:99'
+									tmp_bossTimeString[i] = '99:99:99'
 									tmp_bossDateString[i] = '9999-99-99'
 									bossFlag[i] = False
 									bossFlag0[i] = False
@@ -1032,7 +1032,7 @@ class taskCog(commands.Cog):
 										bossMungFlag[i] = False
 										bossMungCnt[i] = bossMungCnt[i] + 1
 										tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
-										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 										await self.bot.get_channel(channel).send("```" +  bossData[i][0] + ' 미입력 됐습니다.```', tts=False)
 										embed = discord.Embed(
@@ -1052,7 +1052,7 @@ class taskCog(commands.Cog):
 										bossMungFlag[i] = False
 										bossMungCnt[i] = bossMungCnt[i] + 1
 										tmp_bossTime[i] = bossTime[i] = nextTime = tmp_bossTime[i]+datetime.timedelta(hours=int(bossData[i][1]), minutes=int(bossData[i][5]))
-										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+										tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 										tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 										await self.bot.get_channel(channel).send("```" + bossData[i][0] + ' 멍 입니다;(```')
 										embed = discord.Embed(
@@ -1161,7 +1161,7 @@ class mainCog(commands.Cog):
 					basicSetting[20] = ""
 					print(f"아이템채널 ID 오류! [{command[28][0]} 아이템] 명령으로 재설정 바랍니다.")
 			if int(basicSetting[13]) != 0 :
-				print('< 보탐봇 재시작 시간 ' + endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M:%S') + ' >')
+				print('< 보탐봇 재시작 시간 ' + endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M') + ' >')
 				print('< 보탐봇 재시작 주기 ' + basicSetting[13] + '일 >')
 			else :
 				print('< 보탐봇 재시작 설정안됨 >')
@@ -1574,7 +1574,7 @@ class mainCog(commands.Cog):
 			if basicSetting[2] != '0':
 				for i in range(bossNum):
 					if bossMungFlag[i] == True:
-						bossTimeString[i] = tmp_bossTime[i].strftime('%H:%M:%S')
+						bossTimeString[i] = tmp_bossTime[i].strftime('%H:%M')
 						bossDateString[i] = tmp_bossTime[i].strftime('%Y-%m-%d')
 			await dbSave()
 			await data_list_Save("kill_list.ini", "-----척살명단-----", kill_Data)
@@ -1609,7 +1609,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 			
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1800 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -1869,7 +1869,7 @@ class mainCog(commands.Cog):
 					now2 = now2 + datetime.timedelta(hours = int(bossData[i][1]), minutes = int(bossData[i][5]))
 							
 				tmp_bossTime[i] = bossTime[i] = nextTime = now2
-				tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+				tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 				tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 
 			await dbSave()
@@ -1895,7 +1895,7 @@ class mainCog(commands.Cog):
 			sorted_datelist = []
 
 			for i in range(bossNum):
-				if bossMungFlag[i] != True and bossTimeString[i] != '99:99' :
+				if bossMungFlag[i] != True and bossTimeString[i] != '99:99:99' :
 					datelist2.append(bossTime[i])
 
 			for i in range(fixed_bossNum):
@@ -1908,14 +1908,14 @@ class mainCog(commands.Cog):
 				if bossMungFlag[i] != True :
 					aa.append(bossData[i][0])		                 #output_bossData[0] : 보스명
 					aa.append(bossTime[i])                           #output_bossData[1] : 시간
-					aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00)
+					aa.append(bossTime[i].strftime('%H:%M'))      #output_bossData[2] : 시간(00:00:00)
 					ouput_bossData.append(aa)
 				aa = []
 
 			for i in range(fixed_bossNum):
 				aa.append(fixed_bossData[i][0])                      #output_bossData[0] : 보스명
 				aa.append(fixed_bossTime[i])                         #output_bossData[1] : 시간
-				aa.append(fixed_bossTime[i].strftime('%H:%M:%S'))    #output_bossData[2] : 시간(00:00:00)
+				aa.append(fixed_bossTime[i].strftime('%H:%M'))    #output_bossData[2] : 시간(00:00:00)
 				ouput_bossData.append(aa)
 				aa = []
 
@@ -2075,7 +2075,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1000 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -2084,11 +2084,11 @@ class mainCog(commands.Cog):
 					aa.append(bossData[i][0])		                     #output_bossData[0] : 보스명
 					if bossMungFlag[i] == True :
 						aa.append(tmp_bossTime[i])                       #output_bossData[1] : 시간
-						aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))  
+						aa.append(tmp_bossTime[i].strftime('%H:%M'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))  
 						aa.append('-')	                                 #output_bossData[3] : -
 					else :
 						aa.append(bossTime[i])                           #output_bossData[1] : 시간
-						aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))  
+						aa.append(bossTime[i].strftime('%H:%M'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))  
 						aa.append('+')	                                 #output_bossData[3] : +
 					aa.append(bossData[i][2])                            #output_bossData[4] : 멍/미입력 보스
 					aa.append(bossMungCnt[i])	                         #output_bossData[5] : 멍/미입력횟수
@@ -2099,7 +2099,7 @@ class mainCog(commands.Cog):
 			for i in range(fixed_bossNum):
 				aa.append(fixed_bossData[i][0])                      #output_bossData[0] : 보스명
 				aa.append(fixed_bossTime[i])                         #output_bossData[1] : 시간
-				aa.append(fixed_bossTime[i].strftime('%H:%M:%S'))    #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(fixed_bossTime[i].strftime('%H:%M'))
+				aa.append(fixed_bossTime[i].strftime('%H:%M'))    #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(fixed_bossTime[i].strftime('%H:%M'))
 				aa.append('@')                                       #output_bossData[3] : @
 				aa.append(0)                                         #output_bossData[4] : 멍/미입력 보스
 				aa.append(0)                                         #output_bossData[5] : 멍/미입력횟수
@@ -2236,7 +2236,7 @@ class mainCog(commands.Cog):
 			tmp_boss_information.append('')
 
 			for i in range(bossNum):
-				if bossTimeString[i] == '99:99' and bossMungFlag[i] != True :
+				if bossTimeString[i] == '99:99:99' and bossMungFlag[i] != True :
 					if len(tmp_boss_information[tmp_cnt]) > 1800 :
 						tmp_boss_information.append('')
 						tmp_cnt += 1
@@ -2245,11 +2245,11 @@ class mainCog(commands.Cog):
 					aa.append(bossData[i][0])		                     #output_bossData[0] : 보스명
 					if bossMungFlag[i] == True :
 						aa.append(tmp_bossTime[i])                       #output_bossData[1] : 시간
-						aa.append(tmp_bossTime[i].strftime('%H:%M:%S'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))
+						aa.append(tmp_bossTime[i].strftime('%H:%M'))  #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(tmp_bossTime[i].strftime('%H:%M'))
 						aa.append('-')	                                 #output_bossData[3] : -
 					else :
 						aa.append(bossTime[i])                           #output_bossData[1] : 시간
-						aa.append(bossTime[i].strftime('%H:%M:%S'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))
+						aa.append(bossTime[i].strftime('%H:%M'))      #output_bossData[2] : 시간(00:00:00) -> 초빼기 : aa.append(bossTime[i].strftime('%H:%M'))
 						aa.append('+')	                                 #output_bossData[3] : +
 					aa.append(bossData[i][2])                            #output_bossData[4] : 멍/미입력 보스
 					aa.append(bossMungCnt[i])	                         #output_bossData[5] : 멍/미입력횟수
@@ -2273,9 +2273,9 @@ class mainCog(commands.Cog):
 				for i in range(fixed_bossNum):
 					if timestring1 == fixed_bossTime[i]:
 						if (datetime.datetime.now() + datetime.timedelta(hours=int(basicSetting[0]))).strftime('%Y-%m-%d') == fixed_bossTime[i].strftime('%Y-%m-%d'):
-							tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M:%S') #초빼기 : tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M')
+							tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M') #초빼기 : tmp_timeSTR = fixed_bossTime[i].strftime('%H:%M')
 						else:
-							tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M:%S') #초빼기 : tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M')
+							tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M') #초빼기 : tmp_timeSTR = '[' + fixed_bossTime[i].strftime('%Y-%m-%d') + '] ' + fixed_bossTime[i].strftime('%H:%M')
 						fixedboss_information[cntF] = fixedboss_information[cntF] + tmp_timeSTR + ' : ' + fixed_bossData[i][0] + '\n'
 
 			boss_information = []
@@ -3159,7 +3159,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 
 			now = datetime.datetime.now() + datetime.timedelta(hours = int(basicSetting[0]))
 
-			print('< 접속시간 [' + now.strftime('%Y-%m-%d ') + now.strftime('%H:%M:%S') + '] >')
+			print('< 접속시간 [' + now.strftime('%Y-%m-%d ') + now.strftime('%H:%M') + '] >')
 			print('< 텍스트채널 [' + self.get_channel(basicSetting[7]).name + '] 접속완료>')
 			if basicSetting[21] == "1" and str(basicSetting[6]) in channel_voice_id:
 				await self.get_channel(basicSetting[6]).connect(reconnect=True)
@@ -3198,7 +3198,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 					basicSetting[20] = ""
 					print(f"아이템채널 ID 오류! [{command[28][0]} 아이템] 명령으로 재설정 바랍니다.")
 			if int(basicSetting[13]) != 0 :
-				print('< 보탐봇 재시작 시간 ' + endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M:%S') + ' >')
+				print('< 보탐봇 재시작 시간 ' + endTime.strftime('%Y-%m-%d ') + endTime.strftime('%H:%M') + ' >')
 				print('< 보탐봇 재시작 주기 ' + basicSetting[13] + '일 >')
 			else :
 				print('< 보탐봇 재시작 설정안됨 >')
@@ -3322,7 +3322,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 							now2 = now2 + datetime.timedelta(hours = int(bossData[i][1]), minutes = int(bossData[i][5]))
 									
 						tmp_bossTime[i] = bossTime[i] = nextTime = now2
-						tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+						tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 						tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 						embed = discord.Embed(
 								description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
@@ -3371,7 +3371,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 
 							tmp_bossTime[i] = bossTime[i] = temptime				
 
-							tmp_bossTimeString[i] = bossTimeString[i] = temptime.strftime('%H:%M:%S')
+							tmp_bossTimeString[i] = bossTimeString[i] = temptime.strftime('%H:%M')
 							tmp_bossDateString[i] = bossDateString[i] = temptime.strftime('%Y-%m-%d')
 							embed = discord.Embed(
 									description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
@@ -3390,7 +3390,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 
 								tmp_bossTime[i] = bossTime[i] = nextTime				
 
-								tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+								tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 								tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 								embed = discord.Embed(
 										description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
@@ -3436,7 +3436,7 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 								tmp_now = tmp_now + datetime.timedelta(days=int(1))
 
 							tmp_bossTime[i] = bossTime[i] = nextTime = tmp_now
-							tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M:%S')
+							tmp_bossTimeString[i] = bossTimeString[i] = nextTime.strftime('%H:%M')
 							tmp_bossDateString[i] = bossDateString[i] = nextTime.strftime('%Y-%m-%d')
 							embed = discord.Embed(
 									description= '```다음 ' + bossData[i][0] + ' ' + bossTimeString[i] + '입니다.```',
@@ -3451,9 +3451,9 @@ class IlsangDistributionBot(commands.AutoShardedBot):
 					if message.content == bossData[i][0] +'삭제' or message.content == bossData[i][0] +' 삭제':
 						bossTime[i] = datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
 						tmp_bossTime[i] =  datetime.datetime.now()+datetime.timedelta(days=365, hours = int(basicSetting[0]))
-						bossTimeString[i] = '99:99'
+						bossTimeString[i] = '99:99:99'
 						bossDateString[i] = '9999-99-99'
-						tmp_bossTimeString[i] = '99:99'
+						tmp_bossTimeString[i] = '99:99:99'
 						tmp_bossDateString[i] = '9999-99-99'
 						bossFlag[i] = False
 						bossFlag0[i] = False
