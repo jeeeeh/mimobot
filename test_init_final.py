@@ -520,7 +520,7 @@ async def dbSave():
 	
 	datelist = list(set(datelist1))
 
-	information1 = '❤❤❤❤수호혈 보스타임❤❤❤❤\n'
+	information1 = '❤❤❤❤도담도담 보스타임❤❤❤❤\n'
 	for timestring in sorted(datelist):
 		for i in range(bossNum):
 			if timestring == bossTime[i]:
@@ -2141,7 +2141,7 @@ class mainCog(commands.Cog):
 					tmp_boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-						title = "❤❤❤❤수호혈 보스타임❤❤❤❤",
+						title = "❤❤❤❤도담도담 보스타임❤❤❤❤",
 						description= boss_information[0],
 						color=0x0000ff
 						)
@@ -2159,7 +2159,7 @@ class mainCog(commands.Cog):
 					boss_information[0] = '``` ```'
 
 				embed = discord.Embed(
-						title = "❤❤❤❤수호혈 보스타임❤❤❤❤",
+						title = "❤❤❤❤도담도담 보스타임❤❤❤❤",
 						description= boss_information[0],
 						color=0x0000ff
 						)
@@ -2331,7 +2331,7 @@ class mainCog(commands.Cog):
 				boss_information[0] = '``` ```'
 
 			embed = discord.Embed(
-					title = "❤❤❤❤수호혈 보스타임❤❤❤❤",
+					title = "❤❤❤❤도담도담 보스타임❤❤❤❤",
 					description= boss_information[0],
 					color=0x0000ff
 					)
